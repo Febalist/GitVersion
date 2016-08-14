@@ -1,0 +1,14 @@
+{
+  "name": "febalist/git-version",
+  "autoload": {
+    "psr-4": {
+      "Febalist\\GitVersion\\": "src/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "require": {
+    "gitonomy/gitlib": "^1.0"
+  }
+}
