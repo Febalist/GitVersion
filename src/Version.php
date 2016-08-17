@@ -97,10 +97,7 @@ class Version
         if (class_exists(JenssegersDate::class)) {
             return JenssegersDate::createFromTimestamp($timestamp);
         }
-        if (class_exists(Carbon::class)) {
-            return Carbon::createFromTimestamp($timestamp);
-        }
-        return new DateTime("@$timestamp");
+        return Carbon::createFromTimestamp($timestamp);
     }
 
     /** @return string */
