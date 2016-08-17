@@ -1,29 +1,36 @@
 <?php
 
-if (!function_exists('git_version')) {
-    function git_version($path = null)
+if (!function_exists('version')) {
+    function version($path = null)
     {
         return new Febalist\GitVersion\Version($path);
     }
 }
 
-if (!function_exists('version')) {
-    function version($without_prefix = false)
+if (!function_exists('version_current')) {
+    function version_current($without_prefix = false)
     {
-        return git_version()->current($without_prefix);
+        return version()->current($without_prefix);
+    }
+}
+
+if (!function_exists('version_last')) {
+    function version_last($without_prefix = false)
+    {
+        return version()->last($without_prefix);
     }
 }
 
 if (!function_exists('version')) {
     function version_hash($length = 10)
     {
-        return git_version()->hash($length);
+        return version()->hash($length);
     }
 }
 
 if (!function_exists('version')) {
     function version_date()
     {
-        return git_version()->date();
+        return version()->date();
     }
 }

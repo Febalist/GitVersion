@@ -2,16 +2,14 @@
 namespace Febalist\GitVersion;
 
 use Carbon\Carbon;
-use DateTime;
 use Jenssegers\Date\Date as JenssegersDate;
 
 class Version
 {
     protected $base_path;
-    protected $master_branch;
     protected $cache = [];
 
-    public function __construct($path = null, $master = 'master')
+    public function __construct($path = null)
     {
         if (!$path) {
             if (function_exists('base_path')) {
@@ -20,8 +18,7 @@ class Version
                 $path = getcwd();
             }
         }
-        $this->base_path     = realpath($path);
-        $this->master_branch = $master;
+        $this->base_path = realpath($path);
     }
 
     /** @return string */
@@ -37,60 +34,28 @@ class Version
     }
 
     /** @return string */
-    public function current($without_prefix = false)
+    protected function tag($without_prefix = false, $options = null)
     {
-        $version = $this->exec("describe $this->master_branch --match=\"v*\"");
-        if ($without_prefix && starts_with($version, 'v')) {
+        $version = $this->exec("describe --match=\"v*\" $options");
+        if ($version && $without_prefix) {
             $version = substr($version, 1);
         }
         return $version;
     }
 
-    /** @return array */
-    protected function parts()
+    /** @return string */
+    public function current($without_prefix = false)
     {
-        $version = $this->current(true);
-        return explode('.', $version);
-    }
-
-    /** @return integer */
-    public function part($index)
-    {
-        $part = $this->parts()[$index];
-        return intval($part);
-    }
-
-    /** @return integer */
-    public function major()
-    {
-        return $this->part(0);
-    }
-
-    /** @return integer */
-    public function minor()
-    {
-        return $this->part(1);
-    }
-
-    /** @return integer */
-    public function patch()
-    {
-        return $this->part(2);
+        return $this->tag($without_prefix);
     }
 
     /** @return string */
-    public function branch()
+    public function last($without_prefix = false)
     {
-        return $this->exec('rev-parse --abbrev-ref HEAD');
+        return $this->tag($without_prefix, '--abbrev=0');
     }
 
-    /** @return boolean */
-    public function isMaster()
-    {
-        return $this->branch() == $this->master_branch;
-    }
-
-    /** @return JenssegersDate|Carbon|DateTime */
+    /** @return JenssegersDate|Carbon */
     public function date()
     {
         $timestamp = $this->exec('log -1 --pretty=format:%ct');
