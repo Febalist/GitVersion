@@ -21,14 +21,14 @@ if (!function_exists('version_last')) {
     }
 }
 
-if (!function_exists('version')) {
+if (!function_exists('version_hash')) {
     function version_hash($length = 10)
     {
         return version()->hash($length);
     }
 }
 
-if (!function_exists('version')) {
+if (!function_exists('version_date')) {
     function version_date()
     {
         return version()->date();
