@@ -1,4 +1,5 @@
 <?php
+
 namespace Febalist\GitVersion;
 
 use Carbon\Carbon;
@@ -26,10 +27,11 @@ class Version
     {
         $key = md5($command);
         if (!array_has($this->cache, $key)) {
-            $value             = shell_exec("cd \"$this->base_path\" && git $command");
-            $value             = trim($value);
+            $value = shell_exec("cd \"$this->base_path\" && git $command");
+            $value = trim($value);
             $this->cache[$key] = $value;
         }
+
         return $this->cache[$key];
     }
 
@@ -40,6 +42,7 @@ class Version
         if ($version && $without_prefix) {
             $version = substr($version, 1);
         }
+
         return $version;
     }
 
@@ -62,6 +65,7 @@ class Version
         if (class_exists(JenssegersDate::class)) {
             return JenssegersDate::createFromTimestamp($timestamp);
         }
+
         return Carbon::createFromTimestamp($timestamp);
     }
 
@@ -72,7 +76,7 @@ class Version
         if ($length) {
             return substr($hash, 0, $length);
         }
+
         return $hash;
     }
-
 }
